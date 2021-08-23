@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="51698cbab6ab494d998fc5a8c1919476" Name="Diagram1">
+        <EntityTypeShape EntityType="DBModel.album" Width="1.5" PointX="3" PointY="5" />
+        <EntityTypeShape EntityType="DBModel.kullanici" Width="1.5" PointX="0.75" PointY="1" />
+        <EntityTypeShape EntityType="DBModel.sanatci" Width="1.5" PointX="0.75" PointY="5.75" />
+        <EntityTypeShape EntityType="DBModel.siparis" Width="1.5" PointX="3" PointY="1" />
+        <EntityTypeShape EntityType="DBModel.tur" Width="1.5" PointX="5.75" PointY="4.75" />
+        <EntityTypeShape EntityType="DBModel.siparis_liste" Width="1.5" PointX="5.25" PointY="1" />
+        <AssociationConnector Association="DBModel.FK_album_sanatci" />
+        <AssociationConnector Association="DBModel.FK_siparis_kullanici" />
+        <AssociationConnector Association="DBModel.FK_siparis_liste_siparis" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

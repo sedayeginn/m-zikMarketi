@@ -1,0 +1,366 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="album">
+          <Key>
+            <PropertyRef Name="IDAlbum" />
+          </Key>
+          <Property Name="IDAlbum" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Adi" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="Resim" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="IndirimOrani" Type="int" Nullable="false" />
+          <Property Name="SanatciID" Type="int" Nullable="false" />
+          <Property Name="SanatciAdi" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="TurID" Type="int" Nullable="false" />
+          <Property Name="Turu" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="SilindiMi" Type="bit" Nullable="false" />
+          <Property Name="Fiyati" Type="decimal" Precision="9" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="kullanici">
+          <Key>
+            <PropertyRef Name="IDKullanici" />
+          </Key>
+          <Property Name="IDKullanici" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AdiSoyadi" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="Eposta" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="Sifre" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="AktifMi" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sanatci">
+          <Key>
+            <PropertyRef Name="IDSanatci" />
+          </Key>
+          <Property Name="IDSanatci" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Adi" Type="nvarchar" MaxLength="500" Nullable="false" />
+        </EntityType>
+        <EntityType Name="siparis">
+          <Key>
+            <PropertyRef Name="IDSiparis" />
+          </Key>
+          <Property Name="IDSiparis" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SiparisTarihi" Type="datetime" Nullable="false" />
+          <Property Name="KullaniciID" Type="int" Nullable="false" />
+          <Property Name="KullaniciMail" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="Durumu" Type="bit" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'plak_store.dbo.siparis_liste' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="siparis_liste">
+          <Key>
+            <PropertyRef Name="IDListe" />
+            <PropertyRef Name="SiparisID" />
+            <PropertyRef Name="AlbumID" />
+            <PropertyRef Name="AlbumAdi" />
+            <PropertyRef Name="Adet" />
+            <PropertyRef Name="Tutar" />
+          </Key>
+          <Property Name="IDListe" Type="int" Nullable="false" />
+          <Property Name="SiparisID" Type="int" Nullable="false" />
+          <Property Name="AlbumID" Type="int" Nullable="false" />
+          <Property Name="AlbumAdi" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="Adet" Type="int" Nullable="false" />
+          <Property Name="Tutar" Type="decimal" Precision="9" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tur">
+          <Key>
+            <PropertyRef Name="IDTur" />
+          </Key>
+          <Property Name="IDTur" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Adi" Type="nvarchar" MaxLength="500" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_album_sanatci">
+          <End Role="sanatci" Type="Self.sanatci" Multiplicity="1" />
+          <End Role="album" Type="Self.album" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sanatci">
+              <PropertyRef Name="IDSanatci" />
+            </Principal>
+            <Dependent Role="album">
+              <PropertyRef Name="SanatciID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_siparis_kullanici">
+          <End Role="kullanici" Type="Self.kullanici" Multiplicity="1" />
+          <End Role="siparis" Type="Self.siparis" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="kullanici">
+              <PropertyRef Name="IDKullanici" />
+            </Principal>
+            <Dependent Role="siparis">
+              <PropertyRef Name="KullaniciID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_siparis_liste_siparis">
+          <End Role="siparis" Type="Self.siparis" Multiplicity="1" />
+          <End Role="siparis_liste" Type="Self.siparis_liste" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="siparis">
+              <PropertyRef Name="IDSiparis" />
+            </Principal>
+            <Dependent Role="siparis_liste">
+              <PropertyRef Name="SiparisID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBModelStoreContainer">
+          <EntitySet Name="album" EntityType="Self.album" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="kullanici" EntityType="Self.kullanici" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sanatci" EntityType="Self.sanatci" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="siparis" EntityType="Self.siparis" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tur" EntityType="Self.tur" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="siparis_liste" EntityType="Self.siparis_liste" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [siparis_liste].[IDListe] AS [IDListe], 
+    [siparis_liste].[SiparisID] AS [SiparisID], 
+    [siparis_liste].[AlbumID] AS [AlbumID], 
+    [siparis_liste].[AlbumAdi] AS [AlbumAdi], 
+    [siparis_liste].[Adet] AS [Adet], 
+    [siparis_liste].[Tutar] AS [Tutar]
+    FROM [dbo].[siparis_liste] AS [siparis_liste]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_album_sanatci" Association="Self.FK_album_sanatci">
+            <End Role="sanatci" EntitySet="sanatci" />
+            <End Role="album" EntitySet="album" />
+          </AssociationSet>
+          <AssociationSet Name="FK_siparis_kullanici" Association="Self.FK_siparis_kullanici">
+            <End Role="kullanici" EntitySet="kullanici" />
+            <End Role="siparis" EntitySet="siparis" />
+          </AssociationSet>
+          <AssociationSet Name="FK_siparis_liste_siparis" Association="Self.FK_siparis_liste_siparis">
+            <End Role="siparis" EntitySet="siparis" />
+            <End Role="siparis_liste" EntitySet="siparis_liste" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="DBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="album" EntityType="DBModel.album" />
+          <EntitySet Name="kullanici" EntityType="DBModel.kullanici" />
+          <EntitySet Name="sanatci" EntityType="DBModel.sanatci" />
+          <EntitySet Name="siparis" EntityType="DBModel.siparis" />
+          <EntitySet Name="tur" EntityType="DBModel.tur" />
+          <EntitySet Name="siparis_liste" EntityType="DBModel.siparis_liste" />
+          <AssociationSet Name="FK_album_sanatci" Association="DBModel.FK_album_sanatci">
+            <End Role="sanatci" EntitySet="sanatci" />
+            <End Role="album" EntitySet="album" />
+          </AssociationSet>
+          <AssociationSet Name="FK_siparis_kullanici" Association="DBModel.FK_siparis_kullanici">
+            <End Role="kullanici" EntitySet="kullanici" />
+            <End Role="siparis" EntitySet="siparis" />
+          </AssociationSet>
+          <AssociationSet Name="FK_siparis_liste_siparis" Association="DBModel.FK_siparis_liste_siparis">
+            <End Role="siparis" EntitySet="siparis" />
+            <End Role="siparis_liste" EntitySet="siparis_liste" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="album">
+          <Key>
+            <PropertyRef Name="IDAlbum" />
+          </Key>
+          <Property Name="IDAlbum" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Adi" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Resim" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IndirimOrani" Type="Int32" Nullable="false" />
+          <Property Name="SanatciID" Type="Int32" Nullable="false" />
+          <Property Name="SanatciAdi" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="TurID" Type="Int32" Nullable="false" />
+          <Property Name="Turu" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="SilindiMi" Type="Boolean" Nullable="false" />
+          <Property Name="Fiyati" Type="Decimal" Nullable="false" Precision="9" Scale="2" />
+          <NavigationProperty Name="sanatci" Relationship="DBModel.FK_album_sanatci" FromRole="album" ToRole="sanatci" />
+        </EntityType>
+        <EntityType Name="kullanici">
+          <Key>
+            <PropertyRef Name="IDKullanici" />
+          </Key>
+          <Property Name="IDKullanici" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AdiSoyadi" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Eposta" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Sifre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AktifMi" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="siparis" Relationship="DBModel.FK_siparis_kullanici" FromRole="kullanici" ToRole="siparis" />
+        </EntityType>
+        <EntityType Name="sanatci">
+          <Key>
+            <PropertyRef Name="IDSanatci" />
+          </Key>
+          <Property Name="IDSanatci" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Adi" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="album" Relationship="DBModel.FK_album_sanatci" FromRole="sanatci" ToRole="album" />
+        </EntityType>
+        <EntityType Name="siparis">
+          <Key>
+            <PropertyRef Name="IDSiparis" />
+          </Key>
+          <Property Name="IDSiparis" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SiparisTarihi" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="KullaniciID" Type="Int32" Nullable="false" />
+          <Property Name="KullaniciMail" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Durumu" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="kullanici" Relationship="DBModel.FK_siparis_kullanici" FromRole="siparis" ToRole="kullanici" />
+          <NavigationProperty Name="siparis_liste" Relationship="DBModel.FK_siparis_liste_siparis" FromRole="siparis" ToRole="siparis_liste" />
+        </EntityType>
+        <EntityType Name="tur">
+          <Key>
+            <PropertyRef Name="IDTur" />
+          </Key>
+          <Property Name="IDTur" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Adi" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="siparis_liste">
+          <Key>
+            <PropertyRef Name="IDListe" />
+            <PropertyRef Name="SiparisID" />
+            <PropertyRef Name="AlbumID" />
+            <PropertyRef Name="AlbumAdi" />
+            <PropertyRef Name="Adet" />
+            <PropertyRef Name="Tutar" />
+          </Key>
+          <Property Name="IDListe" Type="Int32" Nullable="false" />
+          <Property Name="SiparisID" Type="Int32" Nullable="false" />
+          <Property Name="AlbumID" Type="Int32" Nullable="false" />
+          <Property Name="AlbumAdi" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Adet" Type="Int32" Nullable="false" />
+          <Property Name="Tutar" Type="Decimal" Nullable="false" Precision="9" Scale="2" />
+          <NavigationProperty Name="siparis" Relationship="DBModel.FK_siparis_liste_siparis" FromRole="siparis_liste" ToRole="siparis" />
+        </EntityType>
+        <Association Name="FK_album_sanatci">
+          <End Type="DBModel.sanatci" Role="sanatci" Multiplicity="1" />
+          <End Type="DBModel.album" Role="album" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sanatci">
+              <PropertyRef Name="IDSanatci" />
+            </Principal>
+            <Dependent Role="album">
+              <PropertyRef Name="SanatciID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_siparis_kullanici">
+          <End Type="DBModel.kullanici" Role="kullanici" Multiplicity="1" />
+          <End Type="DBModel.siparis" Role="siparis" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="kullanici">
+              <PropertyRef Name="IDKullanici" />
+            </Principal>
+            <Dependent Role="siparis">
+              <PropertyRef Name="KullaniciID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_siparis_liste_siparis">
+          <End Type="DBModel.siparis" Role="siparis" Multiplicity="1" />
+          <End Type="DBModel.siparis_liste" Role="siparis_liste" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="siparis">
+              <PropertyRef Name="IDSiparis" />
+            </Principal>
+            <Dependent Role="siparis_liste">
+              <PropertyRef Name="SiparisID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DBModelStoreContainer" CdmEntityContainer="DBEntities">
+          <EntitySetMapping Name="album">
+            <EntityTypeMapping TypeName="DBModel.album">
+              <MappingFragment StoreEntitySet="album">
+                <ScalarProperty Name="Fiyati" ColumnName="Fiyati" />
+                <ScalarProperty Name="SilindiMi" ColumnName="SilindiMi" />
+                <ScalarProperty Name="Turu" ColumnName="Turu" />
+                <ScalarProperty Name="TurID" ColumnName="TurID" />
+                <ScalarProperty Name="SanatciAdi" ColumnName="SanatciAdi" />
+                <ScalarProperty Name="SanatciID" ColumnName="SanatciID" />
+                <ScalarProperty Name="IndirimOrani" ColumnName="IndirimOrani" />
+                <ScalarProperty Name="Resim" ColumnName="Resim" />
+                <ScalarProperty Name="Adi" ColumnName="Adi" />
+                <ScalarProperty Name="IDAlbum" ColumnName="IDAlbum" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="kullanici">
+            <EntityTypeMapping TypeName="DBModel.kullanici">
+              <MappingFragment StoreEntitySet="kullanici">
+                <ScalarProperty Name="AktifMi" ColumnName="AktifMi" />
+                <ScalarProperty Name="Sifre" ColumnName="Sifre" />
+                <ScalarProperty Name="Eposta" ColumnName="Eposta" />
+                <ScalarProperty Name="AdiSoyadi" ColumnName="AdiSoyadi" />
+                <ScalarProperty Name="IDKullanici" ColumnName="IDKullanici" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sanatci">
+            <EntityTypeMapping TypeName="DBModel.sanatci">
+              <MappingFragment StoreEntitySet="sanatci">
+                <ScalarProperty Name="Adi" ColumnName="Adi" />
+                <ScalarProperty Name="IDSanatci" ColumnName="IDSanatci" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="siparis">
+            <EntityTypeMapping TypeName="DBModel.siparis">
+              <MappingFragment StoreEntitySet="siparis">
+                <ScalarProperty Name="Durumu" ColumnName="Durumu" />
+                <ScalarProperty Name="KullaniciMail" ColumnName="KullaniciMail" />
+                <ScalarProperty Name="KullaniciID" ColumnName="KullaniciID" />
+                <ScalarProperty Name="SiparisTarihi" ColumnName="SiparisTarihi" />
+                <ScalarProperty Name="IDSiparis" ColumnName="IDSiparis" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tur">
+            <EntityTypeMapping TypeName="DBModel.tur">
+              <MappingFragment StoreEntitySet="tur">
+                <ScalarProperty Name="Adi" ColumnName="Adi" />
+                <ScalarProperty Name="IDTur" ColumnName="IDTur" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="siparis_liste">
+            <EntityTypeMapping TypeName="DBModel.siparis_liste">
+              <MappingFragment StoreEntitySet="siparis_liste">
+                <ScalarProperty Name="Tutar" ColumnName="Tutar" />
+                <ScalarProperty Name="Adet" ColumnName="Adet" />
+                <ScalarProperty Name="AlbumAdi" ColumnName="AlbumAdi" />
+                <ScalarProperty Name="AlbumID" ColumnName="AlbumID" />
+                <ScalarProperty Name="SiparisID" ColumnName="SiparisID" />
+                <ScalarProperty Name="IDListe" ColumnName="IDListe" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
